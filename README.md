@@ -1,2 +1,2 @@
 # ASearchDP1
-Simple A search in grid
+Simple A search on grid

@@ -1,4 +1,4 @@
-package Algorithm;
+package ASearch;
 
 public class Nodo {
     int x, y;
