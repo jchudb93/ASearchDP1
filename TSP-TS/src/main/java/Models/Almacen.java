@@ -33,15 +33,16 @@ public class Almacen {
     }
 
     public Almacen(int ancho, int alto){
-        this.ancho = ancho;
-        this.alto = alto;
-        this.almacen = new boolean[ancho][alto];
-
-        for(int i = 0; i < ancho; i++){
-            for(int j = 0; j < alto; j++){
-                this.almacen[i][j] = false;
-            }
-        }
+        
+        GeneradorAlmacen crearCaso = new GeneradorAlmacen();
+        crearCaso.generarCaso();
+        
+        this.ancho = crearCaso.varAncho;
+        this.alto = crearCaso.varAltura;
+        
+        //this.almacen = new boolean[ancho][alto];
+        
+        this.almacen = crearCaso._almacen();
     }
 
     /**
@@ -230,8 +231,8 @@ public class Almacen {
             for (int i = 0; i < ancho; i++) {
                 for (int j = 0; j < alto; j++) {
                     if (matriz[i][j]) {
-                        writer.print("\u2B1B");
-                        System.out.print("\u2B1B");
+                        writer.print("\u25A0");
+                        System.out.print("\u25A0");
                     } else {
                         writer.print(" ");
                         System.out.print(" ");
