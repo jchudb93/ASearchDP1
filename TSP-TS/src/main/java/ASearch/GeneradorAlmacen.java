@@ -13,6 +13,7 @@ public class GeneradorAlmacen {
 
         bloques = new boolean[anchoBase][alturaBase];
         visitados = new boolean[ancho + 2][alto + 2];
+
         for (int i = 0; i < bloques.length; i++) {
             for (int j = 0; j < bloques[0].length; j++) {
                 bloques[i][j] = true;
