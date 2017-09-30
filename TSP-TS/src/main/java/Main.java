@@ -1,8 +1,14 @@
 import Models.Almacen;
 
+import Models.GeneradorAlmacen;
+
 public class Main {
 
     public static void main(String[] args) {
+
+        GeneradorAlmacen aux = new GeneradorAlmacen();
+        aux.generarCaso();
+
         Almacen alm = new Almacen(20,20);
 
         //boolean x = alm.unidad[1][1];

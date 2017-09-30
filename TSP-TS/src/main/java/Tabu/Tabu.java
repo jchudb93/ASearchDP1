@@ -4,93 +4,98 @@ import java.awt.*;
 
 public class Tabu {
 
-    EntornoTabu entorno;
+    private EntornoTabu entorno;
+    private int[] caminoInicial;
 
     public Tabu(){
         this.entorno = new EntornoTabu();
-
+        //prueba
         entorno.distancias = //Distance matrix, 5x5, used to represent distances
                 new int[][]{{0, 1, 3, 4, 5},
                         {1, 0, 1, 4, 8},
                         {3, 1, 0, 5, 1},
                         {4, 4, 5, 0, 2},
                         {5, 8, 1, 2, 0}};
-        //Between cities. 0,1 represents distance between cities 0 and 1, and so on.
 
-        int[] currSolution = new int[]{0, 1, 2, 3, 4, 0};   //initial solution
-        //city numbers start from 0
-        // the first and last cities' positions do not change
 
-        int numberOfIterations = 100;
-        int tabuLength = 10;
-        ListaTabu tabuList = new ListaTabu(tabuLength);
-
-        int[] bestSol = new int[currSolution.length]; //this is the best Solution So Far
-        System.arraycopy(currSolution, 0, bestSol, 0, bestSol.length);
-        int bestCost = this.entorno.funcionObjetivo(bestSol);
-
-        for (int i = 0; i < numberOfIterations; i++) { // perform iterations here
-
-            currSolution = Tabu.getBestNeighbour(tabuList, this.entorno, currSolution);
-            //printSolution(currSolution);
-            int currCost = this.entorno.funcionObjetivo(currSolution);
-
-            //System.out.println("Current best cost = " + tspEnvironment.getObjectiveFunctionValue(currSolution));
-
-            if (currCost < bestCost) {
-                System.arraycopy(currSolution, 0, bestSol, 0, bestSol.length);
-                bestCost = currCost;
-            }
-        }
+        this.caminoInicial = new int[]{0, 1, 2, 3, 4, 0};
 
     }
 
-    public static int[] getBestNeighbour(ListaTabu tabuList,
-                                         EntornoTabu tspEnviromnet,
+    public int[] generarCamino(int listaTabuTamahno, int listaTabuPermanencia){
+        int[] solucionActual =  new int[this.caminoInicial.length];  //inicializar solucion
+        System.arraycopy(this.caminoInicial, 0, solucionActual, 0, this.caminoInicial.length);
+
+        int numeroIteraciones = 100;
+
+        ListaTabu listaTabu = new ListaTabu(listaTabuTamahno, listaTabuPermanencia);
+
+        int[] mejorSol = new int[solucionActual.length]; //la mejor solucion hasta el momento
+        System.arraycopy(solucionActual, 0, mejorSol, 0, mejorSol.length);
+        int mejorCosto = this.entorno.funcionObjetivo(mejorSol);
+
+        for (int i = 0; i < numeroIteraciones; i++) { // iterar segun parametro
+
+            solucionActual = Tabu.obtenerMejoresVecinos(listaTabu, this.entorno, solucionActual);
+
+            int costoActual = this.entorno.funcionObjetivo(solucionActual);
+
+            //System.out.println("Current best cost = " + tspEnvironment.getObjectiveFunctionValue(currSolution));
+            if (costoActual < mejorCosto) {
+                System.arraycopy(solucionActual, 0, mejorSol, 0, mejorSol.length);
+                mejorCosto = costoActual;
+            }
+        }
+
+        return mejorSol;
+    }
+
+    private static int[] obtenerMejoresVecinos(ListaTabu listaTabu,
+                                         EntornoTabu entorno,
                                          int[] initSolution) {
 
-        int[] bestSol = new int[initSolution.length]; //this is the best Solution So Far
-        System.arraycopy(initSolution, 0, bestSol, 0, bestSol.length);
-        int bestCost = tspEnviromnet.funcionObjetivo(initSolution);
-        int city1 = 0;
-        int city2 = 0;
-        boolean firstNeighbor = true;
+        int[] mejorSol = new int[initSolution.length]; //this is the best Solution So Far
+        System.arraycopy(initSolution, 0, mejorSol, 0, mejorSol.length);
+        int mejorCosto = entorno.funcionObjetivo(initSolution);
+        int nodo1 = 0;
+        int nodo2 = 0;
+        boolean primerVecino = true;
 
-        for (int i = 1; i < bestSol.length - 1; i++) {
-            for (int j = 2; j < bestSol.length - 1; j++) {
+        for (int i = 1; i < mejorSol.length - 1; i++) {
+            for (int j = 2; j < mejorSol.length - 1; j++) {
                 if (i == j) {
                     continue;
                 }
 
-                int[] newBestSol = new int[bestSol.length]; //this is the best Solution So Far
-                System.arraycopy(bestSol, 0, newBestSol, 0, newBestSol.length);
+                int[] mejorSolActual = new int[mejorSol.length]; //mejor solucion actual
+                System.arraycopy(mejorSol, 0, mejorSolActual, 0, mejorSolActual.length);
 
-                newBestSol = intercambiarNodos(i, j, initSolution); //Try swapping cities i and j
-                // , maybe we get a bettersolution
-                int newBestCost = tspEnviromnet.funcionObjetivo(newBestSol);
+                mejorSolActual = Tabu.intercambiarNodos(i, j, initSolution); //Intercambiar nodos i y j
+                // calcular el nuevo mejor costo
+                int mejorCostoActual = entorno.funcionObjetivo(mejorSolActual);
 
-                if ((newBestCost > bestCost || firstNeighbor) && tabuList.listaTabu[i][j] == 0) { //if better move found, store it
-                    firstNeighbor = false;
-                    city1 = i;
-                    city2 = j;
-                    System.arraycopy(newBestSol, 0, bestSol, 0, newBestSol.length);
-                    bestCost = newBestCost;
+                if ((mejorCostoActual > mejorCosto || primerVecino) && !listaTabu.contieneMovimiento(i,j)) { //if better move found, store it
+                    primerVecino = false;
+                    nodo1 = i;
+                    nodo2 = j;
+                    System.arraycopy(mejorSolActual, 0, mejorSol, 0, mejorSolActual.length);
+                    mejorCosto = mejorCostoActual;
                 }
 
 
             }
         }
 
-        if (city1 != 0) {
-            tabuList.decrementarListaTabu();
-            tabuList.agregarNodo(city1, city2);
+        if (nodo1 != 0) {
+            listaTabu.decrementarListaTabu();
+            listaTabu.agregarNodo(nodo1, nodo2);
         }
-        return bestSol;
+        return mejorSol;
 
 
     }
 
-    //swaps two cities
+    // intercambiar dos nodos
     public static int[] intercambiarNodos(int nodo1, int nodo2, int[] solucion) {
         int temp = solucion[nodo1];
         solucion[nodo1] = solucion[nodo2];

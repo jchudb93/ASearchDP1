@@ -180,7 +180,7 @@ public class Almacen {
             }
         }
 
-        //obtener intersecciones
+        //obtener movimientos en L de un vertice a otro.
         for(int i = 0; i < this.ancho; i++){
             for(int j = 0; j < this.alto; j++){
                 //si es un vertice

@@ -9,7 +9,7 @@ public class GeneradorAlmacen {
     private static boolean[][] varBloques;
     private static Random varRandGenerator = new Random();
     
-    private static String varName = "Almacen N°1";
+    private static String varName = "Almacen Nï¿½1";
     private static int varNumPrueba = 70;
     private static int varNumMinPrueba = 25;
     private static int varAumentoPrueba = 30;
@@ -75,7 +75,7 @@ public class GeneradorAlmacen {
 
         varBloques = new boolean[varAncho][varAltura];
         
-        //Creo el almacen, vacio y sin diferenciar las áreas
+        //Creo el almacen, vacio y sin diferenciar las ï¿½reas
         for (int i = 0; i < (varAncho); i++) {
             varBloques[i][0] = false;
             for (int j = 1; j < (varAltura -1); j++) {
@@ -239,7 +239,7 @@ public class GeneradorAlmacen {
     //BEGIN - Mostramos la data generada
     private static void mostrarAlmacen(){
         try{
-            PrintStream out = new PrintStream(new FileOutputStream( varName + ".txt"));
+            PrintStream out = new PrintStream(new FileOutputStream( varName + ".csv"));
             System.setOut(out);
             for (int j = 0; j < varAltura; j++) {
                 for (int i = 0; i < varAncho; i++) {
@@ -259,7 +259,7 @@ public class GeneradorAlmacen {
     
     private static void mostrarListaCoord(int numCaso){
         try{
-            PrintStream out = new PrintStream(new FileOutputStream( varName + " - Coordenadas Caso N°" + (numCaso + 1) + ".txt"));
+            PrintStream out = new PrintStream(new FileOutputStream( varName + " - Coordenadas Caso " + (numCaso + 1) + ".csv"));
             System.setOut(out);
             out.println(varCantCoordenada[numCaso]);
             for (int i = 0; i < varCantCoordenada[numCaso]; i++) {
@@ -273,7 +273,7 @@ public class GeneradorAlmacen {
     
     private static void mostrarCoordEnAlmacen(int numCaso){
         try{
-            PrintStream out = new PrintStream(new FileOutputStream( varName + " - Pos. relativa Caso N°" + (numCaso + 1) + ".txt"));
+            PrintStream out = new PrintStream(new FileOutputStream( varName + " - Pos. relativa Caso " + (numCaso + 1) + ".csv"));
             System.setOut(out);
             boolean saltar;
             for (int j = 0; j < varAltura; j++) {
@@ -296,7 +296,7 @@ public class GeneradorAlmacen {
             }
         }
         catch(IOException e1){
-            System.out.println("Error during writing Posicion relativa de coordenadas - Caso N°" + (numCaso+1));
+            System.out.println("Error during writing Posicion relativa de coordenadas - Caso Nï¿½" + (numCaso+1));
         }
     }
     //END - Mostramos la data generada
