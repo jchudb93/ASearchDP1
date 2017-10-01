@@ -65,22 +65,22 @@ public class ListaTabu {
         public int nodo2;
         public int tiempo;
 
-        public TabuMovimiento(int a, int b, int tiempo){
-            if (a < b){
-                this.nodo1 = a;
-                this.nodo2 = b;
+        public TabuMovimiento(int nodoA, int nodoB, int tiempo){
+            if (nodoA < nodoB){
+                this.nodo1 = nodoA;
+                this.nodo2 = nodoB;
             } else {
-                this.nodo1 = b;
-                this.nodo2 = a;
+                this.nodo1 = nodoB;
+                this.nodo2 = nodoA;
             }
             this.tiempo = tiempo;
         }
 
-        public boolean igualA(int a, int b){
-            if (a < b){
-                return (this.nodo1 == a && this.nodo2 == b);
+        public boolean igualA(int nodoA, int nodoB){
+            if (nodoA < nodoB){
+                return (this.nodo1 == nodoA && this.nodo2 == nodoB);
             } else {
-                return (this.nodo1 == b && this.nodo2 == a);
+                return (this.nodo1 == nodoB && this.nodo2 == nodoA);
             }
 
         }

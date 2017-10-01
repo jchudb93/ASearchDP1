@@ -1,18 +1,22 @@
 package Models;
 
+import java.awt.*;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Almacen {
 
-    public boolean almacen[][];
-    public int ancho;
-    public int alto;
+    private boolean almacen[][];
+    private int ancho;
+    private int alto;
+    private ArrayList<Rack> racks;
 
     private static Random random = new Random();
     private static int MIN_LARGO = 3;
     private static int MAX_LARGO = 5;
+
 
     private enum DIR {
         UP(1,0), RIGTH(0,1), DOWN(-1,0), LEFT(0,-1);
@@ -20,7 +24,7 @@ public class Almacen {
         private final int dx;
         private final int dy;
 
-        private DIR(int dx, int dy){
+        DIR(int dx, int dy){
             this.dx = dx;
             this.dy = dy;
         }
@@ -33,16 +37,12 @@ public class Almacen {
     }
 
     public Almacen(int ancho, int alto){
+
+        this.ancho = ancho;
+        this.alto = alto;
         
-        GeneradorAlmacen crearCaso = new GeneradorAlmacen();
-        crearCaso.generarCaso();
-        
-        this.ancho = crearCaso.varAncho;
-        this.alto = crearCaso.varAltura;
-        
-        //this.almacen = new boolean[ancho][alto];
-        
-        this.almacen = crearCaso._almacen();
+        this.almacen = new boolean[ancho][alto];
+        this.racks = new ArrayList<Rack>();
     }
 
     /**
@@ -53,8 +53,11 @@ public class Almacen {
         for(int i = 1; i < this.ancho - 2; i++){
             for(int j = 1; j < this.alto - 2; j++){
                 int largo = (int) (random.nextDouble()*(MAX_LARGO - MIN_LARGO) + MIN_LARGO);
-                DIR dir = DIR.values()[(int) (random.nextDouble()*3)];
-                crearRackPosible(i,j,largo,dir);
+                DIR dir = DIR.values()[random.nextInt(DIR.values().length)];
+                Rack rack = crearRackPosible(i,j,largo,dir);
+                if(rack != null){
+                    this.racks.add(rack);
+                }
             }
         }
     }
@@ -62,13 +65,13 @@ public class Almacen {
     /**
      * Crear un rack si fuese posible
      */
-    private void crearRackPosible(int iniX, int iniY, int largo, DIR dir){
-        if(dir.getDx() == 0){
+    private Rack crearRackPosible(int iniX, int iniY, int largo, DIR dir){
+        if(dir.getDx() == 0){ //izquierda o derecha
             int finY = iniY + largo*dir.getDy();
             if(finY<=0) finY = 1;
             if(finY>=this.alto -1) finY = this.alto - 2;
 
-            if (Math.abs(iniY - finY) < MIN_LARGO) return;
+            if (Math.abs(iniY - finY) < MIN_LARGO) return null;
             int iniY_aux = iniY;
             int finY_aux = finY;
             //verificar
@@ -91,16 +94,19 @@ public class Almacen {
             iniY = iniY_aux;
             finY = finY_aux;
             if(crear){
+                Point ini = new Point(iniX, iniY);
+                Point fin = new Point(iniX, finY);
                 while(iniY != finY){
                     this.almacen[iniX][iniY] = true;
                     iniY += dir.getDy();
                 }
+                return new Rack(ini, fin);
             }
-        } else {
+        } else { //arriba o abajo
             int finX = iniX + largo*dir.getDx();
             if(finX <= 0) finX = 1;
             if(finX >= this.ancho - 1) finX = this.ancho - 2;
-            if (Math.abs(iniX - finX) < MIN_LARGO) return;
+            if (Math.abs(iniX - finX) < MIN_LARGO) return null;
             int iniX_aux = iniX;
             int finX_aux = finX;
             //verificar
@@ -123,12 +129,16 @@ public class Almacen {
             iniX = iniX_aux;
             finX = finX_aux;
             if(crear){
+                Point ini = new Point(iniX, iniY);
+                Point fin = new Point(finX, iniY);
                 while(iniX != finX){
                     this.almacen[iniX][iniY] = true;
                     iniX += dir.getDx();
                 }
+                return new Rack(ini, fin);
             }
         }
+        return null;
     }
 
 
@@ -185,12 +195,12 @@ public class Almacen {
             for(int j = 0; j < this.alto; j++){
                 //si es un vertice
                 if(nodos[i][j]){
-                    //abajo
+                    //arriba y derecha
                     int y = j + 1;
-                    while(y < this.alto && !this.almacen[i][y] && !nodos[i][y]){
+                    while(y < this.alto && !this.almacen[i][y] && !nodos[i][y]){ //iterar hacia arriba (x+1)
                         int x = i + 1;
                         boolean encontreVertice = false;
-                        while(x < this.ancho && !this.almacen[x][y] && !nodos[x][y]){
+                        while(x < this.ancho && !this.almacen[x][y] && !nodos[x][y]){ //iterar hacia la derecha (y+1)
                             if(encontreVertice = nodos[x][y]) break;
                             x++;
                         }
@@ -200,17 +210,43 @@ public class Almacen {
                         y++;
                     }
 
-                    //derecha
+                    //arriba y derecha
+                    int y2 = j - 1;
+                    while(y2 >= 0 && !this.almacen[i][y2] && !nodos[i][y2]){ //iterar hacia abajo (x+1)
+                        int x = i+1;
+                        boolean encontreVertice = false;
+                        while(x < this.ancho && !this.almacen[x][y2] && !nodos[x][y2]){ //iterar hacia la derecha (y+1)
+                            if(encontreVertice = nodos[x][y2]) break;
+                            x++;
+                        }
+                        if(encontreVertice){
+                            nodos[x][y2] = true;
+                        }
+                        y2--;
+                    }
+
+                    //derecha y arriba
                     int x = i + 1;
-                    while(x < this.ancho && !this.almacen[x][j] && !nodos[x][j]){
+                    while(x < this.ancho && !this.almacen[x][j] && !nodos[x][j]){ //iterar hacia derecha (x+1)
                         y = j + 1;
                         boolean encontreVertice = false;
-                        while(y < this.alto && !this.almacen[x][y] && !(nodos[x][y])){
+                        while(y < this.alto && !this.almacen[x][y] && !(nodos[x][y])){ //iterar hacia arriba (y+1)
                             if(encontreVertice = nodos[x][y]) break;
                             y++;
                         };
                         if(encontreVertice){
                             nodos[i][y] = true;
+                            x++;
+                            continue;
+                        }
+                        encontreVertice = false;
+                        y2 = j - 1;
+                        while(y2 >= 0 && !this.almacen[x][y2] && !(nodos[x][y2])){ //iterar hacia abajo (y-1)
+                            if(encontreVertice = nodos[x][y2]) break;
+                            y2--;
+                        };
+                        if(encontreVertice){
+                            nodos[i][y2] = true;
                         }
                         x++;
                     }
@@ -226,6 +262,7 @@ public class Almacen {
      *  Imprimir almacen
      */
     public void imprimirMatriz(boolean[][] matriz, int ancho, int alto, String nombre_archivo){
+        System.out.print(nombre_archivo);
         try {
             PrintWriter writer = new PrintWriter(nombre_archivo, "UTF-8");
             for (int i = 0; i < ancho; i++) {
@@ -245,8 +282,27 @@ public class Almacen {
         } catch(IOException e){
 
         }
+    }
 
+    public void imprimirRacks(){
+        for(Rack rack: this.racks){
+            rack.imprimir();
+        }
+    }
 
+    public boolean[][] getAlmacen(){
+        return this.almacen;
+    }
 
+    public ArrayList<Rack> getRacks() {
+        return this.racks;
+    }
+
+    public int getAncho(){
+        return this.ancho;
+    }
+
+    public int getAlto(){
+        return this.alto;
     }
 }

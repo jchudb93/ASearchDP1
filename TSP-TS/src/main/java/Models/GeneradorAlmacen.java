@@ -9,7 +9,7 @@ public class GeneradorAlmacen {
     private static boolean[][] varBloques;
     private static Random varRandGenerator = new Random();
     
-    private static String varName = "Almacen N�1";
+    private static String varName = "Almacen N 1";
     private static int varNumPrueba = 70;
     private static int varNumMinPrueba = 25;
     private static int varAumentoPrueba = 30;
@@ -75,7 +75,7 @@ public class GeneradorAlmacen {
 
         varBloques = new boolean[varAncho][varAltura];
         
-        //Creo el almacen, vacio y sin diferenciar las �reas
+        //Creo el almacen, vacio y sin diferenciar las areas
         for (int i = 0; i < (varAncho); i++) {
             varBloques[i][0] = false;
             for (int j = 1; j < (varAltura -1); j++) {
@@ -296,7 +296,7 @@ public class GeneradorAlmacen {
             }
         }
         catch(IOException e1){
-            System.out.println("Error during writing Posicion relativa de coordenadas - Caso N�" + (numCaso+1));
+            System.out.println("Error during writing Posicion relativa de coordenadas - Caso N " + (numCaso+1));
         }
     }
     //END - Mostramos la data generada
