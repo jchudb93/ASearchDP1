@@ -1,3 +1,4 @@
+import Controllers.GestorAlmacen;
 import Models.Almacen;
 
 import Models.GeneradorAlmacen;
@@ -8,13 +9,12 @@ public class Main {
 
         Almacen alm = new Almacen(20,20);
 
-        alm.genRandom();
+        GestorAlmacen.generarRacksAletorios(alm);
+        GestorAlmacen.generarNodos(alm);
 
-        alm.imprimirMatriz(alm.getAlmacen(), alm.getAncho(), alm.getAlto(), "almacen.txt");
+        GestorAlmacen.imprimirAlmacen(alm, "almacen.txt");
 
-
-
-        alm.imprimirMatriz(alm.obtenerNodos(), alm.getAncho(), alm.getAlto(), "nodos.txt");
+        GestorAlmacen.imprimirNodos(alm, "nodos.txt");
 
         alm.imprimirRacks();
     }
