@@ -55,7 +55,7 @@ public class Tabu {
 
         long time_start = System.currentTimeMillis();
         while(i < numeroIteraciones){// iterar segun parametro - condicion de parada
-            solucionActual = this.obtenerMejoresVecinos(listaTabu, this.distancias, solucionActual);
+            solucionActual = this.obtenerMejorVecino(listaTabu, this.distancias, solucionActual);
 
             int costoActual = this.funcionObjetivo(solucionActual);
 
@@ -70,7 +70,7 @@ public class Tabu {
         return mejorSol;
     }
 
-    private int[] obtenerMejoresVecinos(ListaTabu listaTabu,
+    private int[] obtenerMejorVecino(ListaTabu listaTabu,
                                         int[][] distancias,
                                         int[] initSolution) {
 
@@ -82,7 +82,7 @@ public class Tabu {
         boolean primerVecino = true;
 
         for (int i = 1; i < mejorSol.length - 1; i++) {
-            for (int j = 2; j < mejorSol.length - 1; j++) {
+            for (int j = i+1; j < mejorSol.length - 1; j++) {
                 if (i == j) {
                     continue;
                 }
@@ -94,7 +94,8 @@ public class Tabu {
                 // calcular el nuevo mejor costo
                 int mejorCostoActual = this.funcionObjetivo(mejorSolActual);
 
-                if ((mejorCostoActual < mejorCosto || primerVecino) && !listaTabu.contieneMovimiento(i,j)) { //si se encontro un mejor movimiento, guardar
+                //si se encontro un mejor movimiento, guardar
+                if ((mejorCostoActual < mejorCosto || primerVecino) && !listaTabu.contieneMovimiento(i,j)) {
                     primerVecino = false;
                     nodo1 = i;
                     nodo2 = j;

@@ -19,7 +19,7 @@ public class Main {
 
         GestorDistancias dist = new GestorDistancias(alm);
         dist.calcularDistancias();
-        dist.imprimirMatriz();
+        //dist.imprimirMatriz();
 
         int[][] distancias = dist.getMatrizDistancia();
         int[] caminoInicial = new int[dist.obtenerNumeroNodos() + 1];
@@ -30,7 +30,7 @@ public class Main {
 
         Tabu tabu = new Tabu(distancias, caminoInicial);
         //Tabu tabu = new Tabu();
-        int[] sol2 = tabu.generarCamino(1000000, 10, 10);
+        int[] sol2 = tabu.generarCamino(100000, 20, 20);
         int val = tabu.funcionObjetivo(sol2);
         System.out.println();
         imprimirArrayInt(sol2);
