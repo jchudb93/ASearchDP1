@@ -71,7 +71,15 @@ public class GestorDistancias {
 
         //imprimirNodos();
         //System.out.println("\nMatriz de distancia\n");
+    }
 
+    public int obtenerNodoId(int i, int j){
+        for(Nodo n: this.nodos){
+            if (n.getX() == i && n.getY() == j){
+                return n.getNumId();
+            }
+        }
+        return -1;
     }
 
     public void imprimirMatriz() {
