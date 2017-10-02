@@ -14,12 +14,13 @@ public class Main {
         GestorAlmacen.generarRacksAletorios(alm);
         GestorAlmacen.generarNodos(alm);
 
-        GestorAlmacen.imprimirAlmacen(alm, "almacen.txt");
-        GestorAlmacen.imprimirNodos(alm, "nodos.txt");
-        alm.imprimirRacks();
+        //GestorAlmacen.imprimirAlmacen(alm, "almacen.txt");
+        //GestorAlmacen.imprimirNodos(alm, "nodos.txt");
+        //alm.imprimirRacks();
 
         GestorDistancias dist = new GestorDistancias(alm);
         dist.calcularDistancias();
+        dist.imprimirMatriz();
 
         //Tabu tabu = new Tabu();
         //int[] solucion = tabu.generarCamino(100, 10,10);
@@ -34,11 +35,13 @@ public class Main {
         caminoInicial[dist.obtenerNumeroNodos()] = 0;
 
         Tabu tabu2 = new Tabu(distancias, caminoInicial);
-        int[] sol2 = tabu2.generarCamino(1000000, 5, 5);
-
+        //Tabu tabu2 = new Tabu();
+        int[] sol2 = tabu2.generarCamino(100000, 5, 5);
+        int val = tabu2.funcionObjetivo(sol2);
         System.out.println();
         imprimirArrayInt(sol2);
         System.out.println();
+        System.out.println(val);
 
     }
 

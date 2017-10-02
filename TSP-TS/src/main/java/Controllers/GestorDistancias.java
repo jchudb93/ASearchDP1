@@ -48,7 +48,7 @@ public class GestorDistancias {
     public int [][] calcularDistancias(){
         obtenerNodos();
         generarDistancias();
-        imprimirMatriz();
+        //imprimirMatriz();
         return this.matrizDistancia;
     }
 
@@ -64,8 +64,8 @@ public class GestorDistancias {
             }
         }
 
-        imprimirNodos();
-        System.out.println("\nMatriz de distancia\n");
+        //imprimirNodos();
+        //System.out.println("\nMatriz de distancia\n");
 
     }
 
@@ -90,7 +90,7 @@ public class GestorDistancias {
                     matrizDistancia[i][j] = almacen.getAlto()*almacen.getAncho();
             }
         }
-        System.out.println(posNodos.size());
+        //System.out.println(posNodos.size());
         for (int i = 0; i < posNodos.size(); i++) {
             //calculo las distancias al nodo en cada direccion
             distanciaXpos(posNodos.get(i),nodos.get(i).getNumId());

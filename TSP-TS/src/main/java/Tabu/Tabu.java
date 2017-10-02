@@ -88,7 +88,7 @@ public class Tabu {
                 // calcular el nuevo mejor costo
                 int mejorCostoActual = this.funcionObjetivo(mejorSolActual);
 
-                if ((mejorCostoActual > mejorCosto || primerVecino) && !listaTabu.contieneMovimiento(i,j)) { //si se encontro un mejor movimiento, guardar
+                if ((mejorCostoActual < mejorCosto || primerVecino) && !listaTabu.contieneMovimiento(i,j)) { //si se encontro un mejor movimiento, guardar
                     primerVecino = false;
                     nodo1 = i;
                     nodo2 = j;
@@ -109,9 +109,12 @@ public class Tabu {
 
     // intercambiar dos nodos
     private int[] intercambiarNodos(int nodo1, int nodo2, int[] solucion) {
-        int temp = solucion[nodo1];
-        solucion[nodo1] = solucion[nodo2];
-        solucion[nodo2] = temp;
-        return solucion;
+        int[] sol_aux = new int[solucion.length];
+        System.arraycopy(solucion,0,sol_aux,0,solucion.length);
+
+        int temp = sol_aux[nodo1];
+        sol_aux[nodo1] = sol_aux[nodo2];
+        sol_aux[nodo2] = temp;
+        return sol_aux;
     }
 }
