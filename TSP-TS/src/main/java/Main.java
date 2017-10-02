@@ -14,19 +14,12 @@ public class Main {
 
         GestorAlmacen.generarRacksAletorios(alm);
         GestorAlmacen.generarNodos(alm);
-
         //GestorAlmacen.imprimirAlmacen(alm, "almacen.txt");
         //GestorAlmacen.imprimirNodos(alm, "nodos.txt");
-        //alm.imprimirRacks();
 
         GestorDistancias dist = new GestorDistancias(alm);
         dist.calcularDistancias();
         dist.imprimirMatriz();
-
-        //Tabu tabu = new Tabu();
-        //int[] solucion = tabu.generarCamino(100, 10,10);
-        //imprimirArrayInt(solucion);
-
 
         int[][] distancias = dist.getMatrizDistancia();
         int[] caminoInicial = new int[dist.obtenerNumeroNodos() + 1];
@@ -35,12 +28,16 @@ public class Main {
         }
         caminoInicial[dist.obtenerNumeroNodos()] = 0;
 
-        Tabu tabu2 = new Tabu(distancias, caminoInicial);
-        //Tabu tabu2 = new Tabu();
-        int[] sol2 = tabu2.generarCamino(100000, 5, 5);
-        int val = tabu2.funcionObjetivo(sol2);
+        Tabu tabu = new Tabu(distancias, caminoInicial);
+        //Tabu tabu = new Tabu();
+        int[] sol2 = tabu.generarCamino(1000000, 10, 10);
+        int val = tabu.funcionObjetivo(sol2);
         System.out.println();
         imprimirArrayInt(sol2);
+        System.out.println();
+        System.out.println();
+        System.out.println("Duracion: ");
+        System.out.println(tabu.getDuracion());
         System.out.println();
         System.out.println();
         System.out.println("Costo del camino:");
@@ -57,13 +54,5 @@ public class Main {
             System.out.print(String.valueOf(arr[i]) + " ");
         }
     }
-
-    private static int[] swap(int x, int x2, int[] arr){
-        int tmp = arr[x];
-        arr[x] = arr[x2];
-        arr[x2] = tmp;
-        return arr;
-    }
-
 
 }

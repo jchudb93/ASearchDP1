@@ -194,62 +194,109 @@ public class GestorAlmacen {
             for(int j = 0; j < alto; j++){
                 //si es un vertice
                 if(nodos[i][j]){
-                    //arriba y derecha
+                    //arriba y derecha/izquierda
                     int y = j + 1;
-                    while(y < alto && !almacen[i][y] && !nodos[i][y]){ //iterar hacia arriba (x+1)
+                    while(y < alto && !almacen[i][y] && !nodos[i][y]){ //iterar hacia arriba (y+1)
                         int x = i + 1;
                         boolean encontreVertice = false;
-                        while(x < ancho && !almacen[x][y] && !nodos[x][y]){ //iterar hacia la derecha (y+1)
+                        while(x < ancho && !almacen[x][y]){ //iterar hacia la derecha (x+1)
                             if(encontreVertice = nodos[x][y]) break;
                             x++;
                         }
                         if(encontreVertice){
-                            nodos[x][y] = true;
+                            nodos[i][y] = true;
+                            y++;
+                            continue;
+                        }
+                        encontreVertice = false;
+                        int x2 = i - 1;
+                        while(x2 >= 0 && !almacen[x2][y]){ //iterar hacia la izquierda (x-1)
+                            if(encontreVertice = nodos[x2][y]) break;
+                            x2--;
+                        }
+                        if(encontreVertice){
+                            nodos[i][y] = true;
                         }
                         y++;
                     }
 
-                    //arriba y derecha
+                    //abajo y derecha/izquierda
                     int y2 = j - 1;
-                    while(y2 >= 0 && !almacen[i][y2] && !nodos[i][y2]){ //iterar hacia abajo (x+1)
+                    while(y2 >= 0 && !almacen[i][y2] && !nodos[i][y2]){ //iterar hacia abajo (y-1)
                         int x = i+1;
                         boolean encontreVertice = false;
-                        while(x < ancho && !almacen[x][y2] && !nodos[x][y2]){ //iterar hacia la derecha (y+1)
+                        while(x < ancho && !almacen[x][y2]){ //iterar hacia la derecha (x+1)
                             if(encontreVertice = nodos[x][y2]) break;
                             x++;
                         }
                         if(encontreVertice){
-                            nodos[x][y2] = true;
+                            nodos[i][y2] = true;
+                            y2--;
+                            continue;
+                        }
+                        encontreVertice = false;
+                        int x2 = i - 1;
+                        while(x2 >= 0 && !almacen[x2][y2]){ //iterar hacia la izquierda (x-1)
+                            if(encontreVertice = nodos[x2][y2]) break;
+                            x2--;
+                        }
+                        if(encontreVertice){
+                            nodos[i][y2] = true;
                         }
                         y2--;
                     }
 
-                    //derecha y arriba
+                    //derecha y arriba/abajo
                     int x = i + 1;
                     while(x < ancho && !almacen[x][j] && !nodos[x][j]){ //iterar hacia derecha (x+1)
                         y = j + 1;
                         boolean encontreVertice = false;
-                        while(y < alto && !almacen[x][y] && !(nodos[x][y])){ //iterar hacia arriba (y+1)
+                        while(y < alto && !almacen[x][y]){ //iterar hacia arriba (y+1)
                             if(encontreVertice = nodos[x][y]) break;
                             y++;
                         };
                         if(encontreVertice){
-                            nodos[i][y] = true;
+                            nodos[x][j] = true;
                             x++;
                             continue;
                         }
                         encontreVertice = false;
                         y2 = j - 1;
-                        while(y2 >= 0 && !almacen[x][y2] && !(nodos[x][y2])){ //iterar hacia abajo (y-1)
+                        while(y2 >= 0 && !almacen[x][y2]){ //iterar hacia abajo (y-1)
                             if(encontreVertice = nodos[x][y2]) break;
                             y2--;
                         };
                         if(encontreVertice){
-                            nodos[i][y2] = true;
+                            nodos[x][j] = true;
                         }
                         x++;
                     }
-                    i = x - 1;
+
+                    //izquierda y arriba/abajo
+                    int x2 = i - 1;
+                    while(x2 > 0 && !almacen[x2][j] && !nodos[x2][j]){ //iterar hacia izquierda (x-1)
+                        y = j + 1;
+                        boolean encontreVertice = false;
+                        while(y < alto && !almacen[x2][y] ){ //iterar hacia arriba (y+1)
+                            if(encontreVertice = nodos[x2][y]) break;
+                            y++;
+                        };
+                        if(encontreVertice){
+                            nodos[x2][j] = true;
+                            x2++;
+                            continue;
+                        }
+                        encontreVertice = false;
+                        y2 = j - 1;
+                        while(y2 >= 0 && !almacen[x2][y2] ){ //iterar hacia abajo (y-1)
+                            if(encontreVertice = nodos[x2][y2]) break;
+                            y2--;
+                        };
+                        if(encontreVertice){
+                            nodos[x2][j] = true;
+                        }
+                        x2++;
+                    }
                 }
             }
         }
@@ -261,7 +308,7 @@ public class GestorAlmacen {
      *  Imprimir almacen
      */
     public static void imprimirAlmacen(Almacen almacen, String nombre_archivo){
-        System.out.print(nombre_archivo);
+        System.out.println(nombre_archivo);
         int ancho = almacen.getAncho();
         int alto = almacen.getAlto();
         boolean[][] matriz = almacen.getAlmacen();
@@ -271,11 +318,11 @@ public class GestorAlmacen {
             for (int i = 0; i < ancho; i++) {
                 for (int j = 0; j < alto; j++) {
                     if (matriz[i][j]) {
-                        writer.print("\u25A0");
-                        System.out.print("\u25A0");
+                        writer.print("x ");
+                        System.out.print("x ");
                     } else {
-                        writer.print(" ");
-                        System.out.print(" ");
+                        writer.print("_ ");
+                        System.out.print("_ ");
                     }
                 }
                 System.out.println();
@@ -288,7 +335,7 @@ public class GestorAlmacen {
     }
 
     public static void imprimirNodos(Almacen almacen, String nombre_archivo){
-        System.out.print(nombre_archivo);
+        System.out.println(nombre_archivo);
         int ancho = almacen.getAncho();
         int alto = almacen.getAlto();
         boolean[][] matriz = almacen.getNodos();
@@ -298,11 +345,11 @@ public class GestorAlmacen {
             for (int i = 0; i < ancho; i++) {
                 for (int j = 0; j < alto; j++) {
                     if (matriz[i][j]) {
-                        writer.print("\u25A0");
-                        System.out.print("\u25A0");
+                        writer.print("x ");
+                        System.out.print("x ");
                     } else {
-                        writer.print(" ");
-                        System.out.print(" ");
+                        writer.print("_ ");
+                        System.out.print("_ ");
                     }
                 }
                 System.out.println();

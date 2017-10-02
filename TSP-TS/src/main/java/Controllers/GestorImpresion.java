@@ -17,13 +17,14 @@ public class GestorImpresion {
                 if(alm.getAlmacen()[i][j]==false){
                     if(posNodos.contains(new Point(i,j))){
                         int pos = posNodos.indexOf(new Point(i,j));
-                        System.out.print(aux.indexOf(pos));
+                        System.out.printf("%2d", aux.indexOf(pos));
                     }
-                    else
-                    System.out.print("__");
+                    else {
+                        System.out.print(" _");
+                    }
                 }
                 else if(alm.getAlmacen()[i][j]==true){
-                    System.out.print("xx");
+                    System.out.print(" x");
                 }
             }
             System.out.println();

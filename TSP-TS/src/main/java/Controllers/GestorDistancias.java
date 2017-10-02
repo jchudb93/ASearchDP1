@@ -58,9 +58,10 @@ public class GestorDistancias {
 
     private void obtenerNodos() {
         //agrego a una lista los nodos a analizar
+        boolean[][] almNodos = this.almacen.getNodos();
         for (int i = 0; i < almacen.getAlmacen().length; i++) {
             for (int j = 0; j < almacen.getAlmacen()[i].length; j++) {
-                if(almacen.getNodos()[i][j]){
+                if(almNodos[i][j]){
                     nodos.add(new Nodo(i,j,numId));
                     posNodos.add(new Point(i,j));
                     numId++;

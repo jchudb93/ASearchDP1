@@ -6,6 +6,7 @@ public class Tabu {
 
     private int[][] distancias;
     private int[] caminoInicial;
+    private long duracion;
 
     public Tabu(){
         //prueba
@@ -18,12 +19,14 @@ public class Tabu {
 
 
         this.caminoInicial = new int[]{0, 1, 2, 3, 4, 0};
+        this.duracion = 0;
     }
 
 
     public Tabu(int[][] distancias, int[] caminoInicial){
         this.distancias = distancias;
         this.caminoInicial = caminoInicial;
+        this.duracion = 0;
     }
 
     /**
@@ -49,7 +52,9 @@ public class Tabu {
         int mejorCosto = this.funcionObjetivo(mejorSol);
 
         int i = 0;
-        while(i < numeroIteraciones){// iterar segun parametro
+
+        long time_start = System.currentTimeMillis();
+        while(i < numeroIteraciones){// iterar segun parametro - condicion de parada
             solucionActual = this.obtenerMejoresVecinos(listaTabu, this.distancias, solucionActual);
 
             int costoActual = this.funcionObjetivo(solucionActual);
@@ -60,6 +65,7 @@ public class Tabu {
             }
             i++;
         }
+        this.duracion = ( System.currentTimeMillis() - time_start );
 
         return mejorSol;
     }
@@ -116,5 +122,9 @@ public class Tabu {
         sol_aux[nodo1] = sol_aux[nodo2];
         sol_aux[nodo2] = temp;
         return sol_aux;
+    }
+
+    public double getDuracion(){
+        return this.duracion;
     }
 }
