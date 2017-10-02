@@ -20,10 +20,16 @@ public class Tabu {
         this.caminoInicial = new int[]{0, 1, 2, 3, 4, 0};
     }
 
+
+    public Tabu(int[][] distancias, int[] caminoInicial){
+        this.distancias = distancias;
+        this.caminoInicial = caminoInicial;
+    }
+
     /**
      * Funcion objetivo: suma de distancias
      */
-    private int funcionObjetivo(int[] solucion){
+    public int funcionObjetivo(int[] solucion){
         int valor = 0;
 
         for(int i = 0 ; i < solucion.length-1; i++){
@@ -42,8 +48,8 @@ public class Tabu {
         System.arraycopy(solucionActual, 0, mejorSol, 0, mejorSol.length);
         int mejorCosto = this.funcionObjetivo(mejorSol);
 
-        for (int i = 0; i < numeroIteraciones; i++) { // iterar segun parametro
-
+        int i = 0;
+        while(i < numeroIteraciones){// iterar segun parametro
             solucionActual = this.obtenerMejoresVecinos(listaTabu, this.distancias, solucionActual);
 
             int costoActual = this.funcionObjetivo(solucionActual);
@@ -52,6 +58,7 @@ public class Tabu {
                 System.arraycopy(solucionActual, 0, mejorSol, 0, mejorSol.length);
                 mejorCosto = costoActual;
             }
+            i++;
         }
 
         return mejorSol;
@@ -61,7 +68,7 @@ public class Tabu {
                                         int[][] distancias,
                                         int[] initSolution) {
 
-        int[] mejorSol = new int[initSolution.length]; //this is the best Solution So Far
+        int[] mejorSol = new int[initSolution.length]; //la mejor solucion local
         System.arraycopy(initSolution, 0, mejorSol, 0, mejorSol.length);
         int mejorCosto = this.funcionObjetivo(initSolution);
         int nodo1 = 0;
@@ -77,11 +84,11 @@ public class Tabu {
                 int[] mejorSolActual = new int[mejorSol.length]; //mejor solucion actual
                 System.arraycopy(mejorSol, 0, mejorSolActual, 0, mejorSolActual.length);
 
-                mejorSolActual = Tabu.intercambiarNodos(i, j, initSolution); //Intercambiar nodos i y j
+                mejorSolActual = this.intercambiarNodos(i, j, initSolution); //Intercambiar nodos i y j
                 // calcular el nuevo mejor costo
                 int mejorCostoActual = this.funcionObjetivo(mejorSolActual);
 
-                if ((mejorCostoActual > mejorCosto || primerVecino) && !listaTabu.contieneMovimiento(i,j)) { //if better move found, store it
+                if ((mejorCostoActual > mejorCosto || primerVecino) && !listaTabu.contieneMovimiento(i,j)) { //si se encontro un mejor movimiento, guardar
                     primerVecino = false;
                     nodo1 = i;
                     nodo2 = j;
@@ -101,7 +108,7 @@ public class Tabu {
     }
 
     // intercambiar dos nodos
-    public static int[] intercambiarNodos(int nodo1, int nodo2, int[] solucion) {
+    private int[] intercambiarNodos(int nodo1, int nodo2, int[] solucion) {
         int temp = solucion[nodo1];
         solucion[nodo1] = solucion[nodo2];
         solucion[nodo2] = temp;

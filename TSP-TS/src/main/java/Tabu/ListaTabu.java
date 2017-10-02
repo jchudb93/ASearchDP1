@@ -20,6 +20,9 @@ public class ListaTabu {
 
     public boolean contieneMovimiento(int nodo1, int nodo2){
 
+        /*
+        return listaTabu[nodo1][nodo2] != 0;
+        */
         for(TabuMovimiento mov: this.listaTabu){
             if(mov.igualA(nodo1, nodo2)){
                 return true;
