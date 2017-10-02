@@ -30,6 +30,10 @@ public class GestorDistancias {
         almacenAux = almacen.getAlmacen();
     }
 
+    public List<Point> getPosNodos() {
+        return posNodos;
+    }
+
     public int[][] getMatrizDistancia(){
         int[][] mat = new int[nodos.size()][nodos.size()];
         for(int i = 0; i < mat.length; i++){

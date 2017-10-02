@@ -1,5 +1,6 @@
 import Controllers.GestorAlmacen;
 import Controllers.GestorDistancias;
+import Controllers.GestorImpresion;
 import Models.Almacen;
 import Models.GeneradorAlmacen;
 import Tabu.*;
@@ -41,7 +42,13 @@ public class Main {
         System.out.println();
         imprimirArrayInt(sol2);
         System.out.println();
+        System.out.println();
+        System.out.println("Costo del camino:");
         System.out.println(val);
+        System.out.println();
+        System.out.println("Camino: ");
+        System.out.println();
+        GestorImpresion.imprimirAlmancen(alm,dist.getPosNodos(),sol2);
 
     }
 
