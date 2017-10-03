@@ -9,6 +9,7 @@ public class Recocido {
     private int [][] distancias;
     private int [] caminoInicial;
     private long duracion:
+    private int [] distanciaPorIter;
 
     //temperatura inicial
     private double temperatura = 1000;
@@ -30,6 +31,8 @@ public class Recocido {
 
         long time_start = System.currentTimeMillis();
         velocidadEnfriamiento = temperatura/ getNumeroIteraciones();
+
+        this.setDistanciaPorIter(new int[(int)numIteraciones])
 
         System.out.println("Distancia Total Solución Inicial: " + funcionObjetivo(this.getCaminoInicial()));
         System.out.print("Camino inicial: ");
@@ -53,7 +56,8 @@ public class Recocido {
         //para la probabilidad de aceptacion
         double probAcept;
 
-        while(temperatura > 0){
+
+        for (int iter = 0 ; i < this.getNumeroIteraciones(); i++){
 
             //elijo dos posiciones al azar para hacer swap
             int pos1 = rand.nextInt(solucionActual.length);
@@ -86,20 +90,13 @@ public class Recocido {
             //enfriamiento
             temperatura = temperatura - velocidadEnfriamiento;
 
-            System.out.println("Temperatura actual: " + temperatura);
-            System.out.print("Solucion actual: ");
-            Utiles.imprimirCamino(this.getCaminoInicial());
-            System.out.print("Costo Actual: ");
-            System.out.println();
+            this.getDistanciaPorIter()[(int)iter] = fObjetivoActual;
 
         }
 
         this.setDuracion(( System.currentTimeMillis() - time_start ));
         this.setFuncionObjetivo(fObjetivoActual);
         return solucionActual;
-
-
-
     }
 
 
@@ -168,5 +165,13 @@ public class Recocido {
 
     public void setFuncionObjetivo(double funcionObjetivo) {
         this.funcionObjetivo = funcionObjetivo;
+    }
+
+    public int[] getDistanciaPorIter() {
+        return distanciaPorIter;
+    }
+
+    public void setDistanciaPorIter(int[] distanciaPorIter) {
+        this.distanciaPorIter = distanciaPorIter;
     }
 }
