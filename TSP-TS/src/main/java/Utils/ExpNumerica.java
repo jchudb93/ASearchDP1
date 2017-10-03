@@ -33,6 +33,10 @@ public class ExpNumerica {
 
         public Resultado(){
         }
+
+        public void imprimirResultado(){
+
+        }
     }
 
     public  ExpNumerica(int numMuestras, int productosMin, int productosMax){
