@@ -6,22 +6,30 @@ import java.lang.*;
 
 public class Recocido {
 
-
     private int [][] distancias;
     private int [] caminoInicial;
+    private long duracion:
 
     //temperatura inicial
     private double temperatura = 1000;
     //que va disminuyendo en cada iteracion segun:
-    private double velocidadEnfriamiento = 0.01;
+    private double velocidadEnfriamiento;
+    //determinada por el
+    private double numeroIteraciones = 100000;
 
-    //constructor recibe las di
+    //valor de la funcion objetivo final
+    private double funcionObjetivo;
+
+    //constructor recibe la matriz de distancias y camino inicial
     public Recocido(int [][] distancias, int [] caminoInicial) {
         this.setCaminoInicial(caminoInicial);
         this.setDistancias(distancias);
     }
 
     public int[] generarCamino(){
+
+        long time_start = System.currentTimeMillis();
+        velocidadEnfriamiento = temperatura/ getNumeroIteraciones();
 
         System.out.println("Distancia Total Solución Inicial: " + funcionObjetivo(this.getCaminoInicial()));
         System.out.print("Camino inicial: ");
@@ -85,6 +93,13 @@ public class Recocido {
             System.out.println();
 
         }
+
+        this.setDuracion(( System.currentTimeMillis() - time_start ));
+        this.setFuncionObjetivo(fObjetivoActual);
+        return solucionActual;
+
+
+
     }
 
 
@@ -129,5 +144,29 @@ public class Recocido {
 
     public void setVelocidadEnfriamiento(double velocidadEnfriamiento) {
         this.velocidadEnfriamiento = velocidadEnfriamiento;
+    }
+
+    public long getDuracion() {
+        return duracion;
+    }
+
+    public void setDuracion(lond duracion) {
+        this.duracion = duracion;
+    }
+
+    public double getNumeroIteraciones() {
+        return numeroIteraciones;
+    }
+
+    public void setNumeroIteraciones(double numeroIteraciones) {
+        this.numeroIteraciones = numeroIteraciones;
+    }
+
+    public double getFuncionObjetivo() {
+        return funcionObjetivo;
+    }
+
+    public void setFuncionObjetivo(double funcionObjetivo) {
+        this.funcionObjetivo = funcionObjetivo;
     }
 }

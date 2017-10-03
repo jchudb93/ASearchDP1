@@ -6,6 +6,7 @@ import Controllers.GestorProducto;
 import Models.Almacen;
 import Models.Producto;
 import Tabu.Tabu;
+import Recocido.*;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -87,12 +88,21 @@ public class ExpNumerica {
             Tabu tabu = new Tabu(distancias, caminoInicial);
             int[] solucion = tabu.generarCamino(100000, 100000, 5, 5);
 
+
+            Recocido recocido = new Recocido(distancias, caminoInicial);
+            recocido.setNumeroIteraciones(100000);
+            int[] solucionRecocido = recocido.generarCamino();
+
             //Guardar soluciones
             Resultado resultado = new Resultado();
 
             resultado.costoTabu = tabu.funcionObjetivo(solucion);
             resultado.tiempoTabu = tabu.getDuracion();
             resultado.iteracionesTabu = tabu.getIteracion();
+
+            resultado.costoRecocido = recocido.getFuncionObjetivo();
+            resultado.tiempoRecocido = recocido.getDuracion();
+            resultado.iteracionesRecocido = recocido.getNumeroIteraciones();
 
             this.resultados.add(resultado);
         }
