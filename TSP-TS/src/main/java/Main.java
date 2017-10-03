@@ -42,15 +42,15 @@ public class Main {
         int[][] matDistancias = nnnc.obtenerMatrizNodos();
         int[][] distancias = dist.obtenerDistanciasProductos(prodEnMatrizDistancia, matDistancias, productos);
 
-        NearestNeighbor nearestNeighbor = new NearestNeighbor(distancias, 0);
-        nearestNeighbor.generar();
+        NearestNeighbor nn = new NearestNeighbor(distancias, 0);
+        nn.generar();
         System.out.println("Nearest Neighbor Costo:");
-        System.out.println(nearestNeighbor.obtenerCosto());
+        System.out.println(nn.obtenerCosto());
         System.out.println("Nearest Neighbor Duracion:");
-        System.out.println(nearestNeighbor.obtenerDuracion());
+        System.out.println(nn.obtenerDuracion());
 
 
-        int[] caminoInicial = nearestNeighbor.obtenerSolucion();
+        int[] caminoInicial = nn.obtenerSolucion();
 
         Tabu tabu = new Tabu(distancias, caminoInicial);
         int[] solucion = tabu.generarCamino(100000, 100000, 5, 5);

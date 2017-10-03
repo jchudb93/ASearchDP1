@@ -90,11 +90,11 @@ public class Tabu {
 
     private int[] obtenerMejorVecino(ListaTabu listaTabu,
                                         int[][] distancias,
-                                        int[] initSolution) {
+                                        int[] solInicial) {
 
-        int[] mejorSol = new int[initSolution.length]; //la mejor solucion local
-        System.arraycopy(initSolution, 0, mejorSol, 0, mejorSol.length);
-        int mejorCosto = this.funcionObjetivo(initSolution);
+        int[] mejorSol = new int[solInicial.length]; //la mejor solucion local
+        System.arraycopy(solInicial, 0, mejorSol, 0, mejorSol.length);
+        int mejorCosto = this.funcionObjetivo(solInicial);
         int nodo1 = 0;
         int nodo2 = 0;
         boolean primerVecino = true;
@@ -108,7 +108,7 @@ public class Tabu {
                 int[] mejorSolActual = new int[mejorSol.length]; //mejor solucion actual
                 System.arraycopy(mejorSol, 0, mejorSolActual, 0, mejorSolActual.length);
 
-                mejorSolActual = this.intercambiarNodos(i, j, initSolution); //Intercambiar nodos i y j
+                mejorSolActual = this.intercambiarNodos(i, j, solInicial); //Intercambiar nodos i y j
                 // calcular el nuevo mejor costo
                 int mejorCostoActual = this.funcionObjetivo(mejorSolActual);
 
