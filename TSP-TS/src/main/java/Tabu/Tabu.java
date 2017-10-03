@@ -143,7 +143,7 @@ public class Tabu {
         return solucion;
     }
 
-    public double getDuracion(){
+    public long getDuracion(){
         return this.duracion;
     }
 
