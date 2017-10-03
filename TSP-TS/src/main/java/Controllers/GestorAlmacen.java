@@ -173,7 +173,7 @@ public class GestorAlmacen {
             finY = finY_aux;
             if(crear){
                 Point ini = new Point(iniX, iniY);
-                Point fin = new Point(iniX, finY);
+                Point fin = new Point(iniX, iniY + (largo-1)*dir.getDy());
                 while(iniY != finY){
                     almacen[iniX][iniY] = true;
                     iniY += dir.getDy();
@@ -208,7 +208,7 @@ public class GestorAlmacen {
             finX = finX_aux;
             if(crear){
                 Point ini = new Point(iniX, iniY);
-                Point fin = new Point(finX, iniY);
+                Point fin = new Point(iniX + (largo-1)*dir.getDx(), iniY);
                 while(iniX != finX){
                     almacen[iniX][iniY] = true;
                     iniX += dir.getDx();
@@ -424,11 +424,11 @@ public class GestorAlmacen {
             for (int i = 0; i < ancho; i++) {
                 for (int j = 0; j < alto; j++) {
                     if (matriz[i][j]) {
-                        writer.print("x ");
-                        System.out.print("x ");
+                        writer.print("x");
+                        System.out.print("x");
                     } else {
-                        writer.print("_ ");
-                        System.out.print("_ ");
+                        writer.print("_");
+                        System.out.print("_");
                     }
                 }
                 System.out.println();

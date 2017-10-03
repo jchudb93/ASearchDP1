@@ -31,22 +31,22 @@ public class Rack {
     }
 
     public boolean esVertical(){
-        return posIni.x != posFin.x;
+        return posIni.x == posFin.x;
     }
 
     public boolean esHorizontal(){
-        return posIni.x == posFin.x;
+        return posIni.x != posFin.x;
     }
 
     public int longitud(){
         if(this.esHorizontal()){
-            return abs(posIni.y - posFin.y);
+            return abs(posIni.y - posFin.y)+1;
         } else {
-            return abs(posIni.x - posFin.x);
+            return abs(posIni.x - posFin.x)+1;
         }
     }
 
-    public Point obtenerPosRandDentro(){
+    public Point obtenerPosRandAlBorder(){
         int pos = rand.nextInt(this.longitud());
         if(this.esHorizontal()){
             if(posIni.x < posFin.x){

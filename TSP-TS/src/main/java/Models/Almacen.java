@@ -15,8 +15,8 @@ public class Almacen {
     private ArrayList<Rack> racks;
 
 
-    public static int MIN_LARGO = 3;
-    public static int MAX_LARGO = 5;
+    public static int MIN_LARGO = 8;
+    public static int MAX_LARGO = 10;
 
     public Almacen(int ancho, int alto){
 

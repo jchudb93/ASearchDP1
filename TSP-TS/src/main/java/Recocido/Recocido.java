@@ -85,6 +85,8 @@ public class Recocido {
             System.out.println();
 
         }
+
+        return solucionActual;
     }
 
 

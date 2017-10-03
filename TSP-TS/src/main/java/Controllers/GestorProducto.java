@@ -26,12 +26,7 @@ public class GestorProducto {
         for(int i = 1; i < numProd+1; i++){
             //escoger un rack al azar
             Rack rack = racks.get(randomNumRack.nextInt(racks.size()));
-            Point p = rack.obtenerPosRandDentro();
-            if(rack.esHorizontal()){
-                p.y = p.y - 1;
-            } else {
-                p.x = p.x - 1;
-            }
+            Point p = rack.obtenerPosRandAlBorder();
             Producto prod = new Producto(i,"Producto " + String.valueOf(i), p);
             productos.add(prod);
         }

@@ -5,9 +5,13 @@ import Controllers.GestorDistancias;
 import Controllers.GestorProducto;
 import Models.Almacen;
 import Models.Producto;
+import Models.Rack;
 import Tabu.Tabu;
 
 import java.awt.*;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -34,9 +38,6 @@ public class ExpNumerica {
         public Resultado(){
         }
 
-        public void imprimirResultado(){
-
-        }
     }
 
     public  ExpNumerica(int numMuestras, int productosMin, int productosMax){
@@ -50,11 +51,11 @@ public class ExpNumerica {
     public void generarRandom(String archivoAlm, String archivoProd){
         //Generar almacen rack
         Almacen alm = new Almacen(100,100);
+        GestorAlmacen.generarRacksAletorios(alm);
         Point puntoInicio = new Point(0,0);
 
-        GestorAlmacen.generarRacksAletorios(alm);
-
         for(int i = 0; i < this.numMuestras; i++){
+            alm.limpiarNodos();
             int numProductos = random.nextInt(this.productosMax - this.productosMin) + this.productosMin;
 
             ArrayList<Producto> productos = GestorProducto.generarProductos(alm, numProductos, puntoInicio);
@@ -79,13 +80,11 @@ public class ExpNumerica {
             //Solucion inicial
             NearestNeighbor nn = new NearestNeighbor(distancias, 0);
             nn.generar();
-            System.out.println(nn.obtenerCosto());
-            System.out.println(nn.obtenerDuracion());
             int[] caminoInicial = nn.obtenerSolucion();
             
             //Busqueda Tabu
             Tabu tabu = new Tabu(distancias, caminoInicial);
-            int[] solucion = tabu.generarCamino(100000, 100000, 5, 5);
+            int[] solucion = tabu.generarCamino(1000, 1000, 5, 5);
 
             //Guardar soluciones
             Resultado resultado = new Resultado();
@@ -96,6 +95,7 @@ public class ExpNumerica {
 
             this.resultados.add(resultado);
         }
+        this.guardarResultados("resultados.csv");
     }
 
     public void generarConDatosCargados(String archivoAlm, String archivoProd){
@@ -107,5 +107,22 @@ public class ExpNumerica {
             System.out.print(String.valueOf(arr[i]) + " ");
         }
         System.out.println();
+    }
+
+    private void guardarResultados(String nombre_archivo){
+        try{
+            PrintStream out = new PrintStream(new FileOutputStream(nombre_archivo));
+            System.setOut(out);
+            out.println("tabu_iteraciones, tabu_costo, tabu_tiempo, " +
+                        "recocido_iteraciones, recocido_costo, recocido_tiempo");
+            for (Resultado res: this.resultados) {
+                out.print(res.iteracionesTabu + ", " + res.costoTabu + ", " + res.tiempoTabu + ", " +
+                        res.iteracionesRecocido + ", " + res.costoRecocido + ", " + res.tiempoRecocido);
+                out.println();
+            }
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
     }
 }
