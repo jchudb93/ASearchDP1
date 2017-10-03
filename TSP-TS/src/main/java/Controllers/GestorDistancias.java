@@ -2,6 +2,7 @@ package Controllers;
 
 import Models.Almacen;
 import Models.Nodo;
+import Models.Producto;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -205,5 +206,60 @@ public class GestorDistancias {
 
     private boolean estaEnAlmacen(int x, int y){
         return x >= 0 && y >= 0 && x < almacen.getAncho() && y < almacen.getAlto();
+    }
+
+    public int[] obtenerProdsId(ArrayList<Producto> productos){
+        int[] prods = new int[productos.size()];
+
+        int i = 0;
+        for (Producto p: productos) {
+            Nodo n = buscarNodoPorProducto(p);
+            prods[i] = n.getNumId();
+            i++;
+        }
+        return prods;
+    }
+
+    public int[][] obtenerDistanciasProductos(int[] prodEnMatrizDistancia, int[][] matDistancias,
+                                              ArrayList<Producto> productos){
+        int[][] distancias = new int[productos.size()][productos.size()];
+
+        for(int i = 0; i < distancias.length; i++){
+            distancias[i][i] = 0;
+        }
+
+        for(int i = 0; i < productos.size(); i++){
+            for (int j = i+1; j < productos.size(); j++) {
+                Producto pA = productos.get(i);
+                Producto pB = productos.get(j);
+                Nodo nodoPA = buscarNodoPorProducto(pA);
+                Nodo nodoPB = buscarNodoPorProducto(pB);
+
+                int indiceA = encontrarIndice(prodEnMatrizDistancia, nodoPA.getNumId());
+                int indiceB = encontrarIndice(prodEnMatrizDistancia, nodoPB.getNumId());
+
+                distancias[i][j] = matDistancias[indiceA][indiceB];
+                distancias[j][i] = matDistancias[indiceB][indiceA];
+            }
+        }
+
+        return distancias;
+    }
+
+    private int encontrarIndice(int[] array, int valor){
+        for (int i = 0; i < array.length ; i++) {
+            if(array[i] == valor)
+                return i;
+        }
+        return -1;
+    }
+
+    private Nodo buscarNodoPorProducto(Producto p){
+        for (Nodo n: this.nodos) {
+            if(n.getX() == p.getPosicion().x && n.getY() == p.getPosicion().y){
+                return n;
+            }
+        }
+        return null;
     }
 }

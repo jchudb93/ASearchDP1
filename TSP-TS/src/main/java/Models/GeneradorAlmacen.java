@@ -48,7 +48,6 @@ public class GeneradorAlmacen {
             int cantPedido = varNumMinPrueba + varRandGenerator.nextInt(varAumentoPrueba);
             varCantCoordenada[k] = cantPedido;
             crearPunto(k);
-            
         }
         
         //Mostramos la data generada

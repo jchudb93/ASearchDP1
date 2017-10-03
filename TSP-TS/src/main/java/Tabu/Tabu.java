@@ -7,6 +7,9 @@ public class Tabu {
     private int[][] distancias;
     private int[] caminoInicial;
     private long duracion;
+    private long iteracion;
+    private long iteracionSinMejora;
+    private int[] distanciaPorIter;
 
     public Tabu(){
         //prueba
@@ -27,6 +30,8 @@ public class Tabu {
         this.distancias = distancias;
         this.caminoInicial = caminoInicial;
         this.duracion = 0;
+        this.iteracion = 0;
+        this.iteracionSinMejora = 0;
     }
 
     /**
@@ -41,8 +46,10 @@ public class Tabu {
         return valor;
     }
 
-    public int[] generarCamino(int numeroIteraciones, int listaTabuTamahno, int listaTabuPermanencia){
+    public int[] generarCamino(long numIteraciones, long numIteracionesSinMejora,
+                               int listaTabuTamahno, int listaTabuPermanencia){
         int[] solucionActual =  new int[this.caminoInicial.length];  //inicializar solucion
+        this.distanciaPorIter = new int[(int)numIteraciones]; //
         System.arraycopy(this.caminoInicial, 0, solucionActual, 0, this.caminoInicial.length);
 
         ListaTabu listaTabu = new ListaTabu(listaTabuTamahno, listaTabuPermanencia);
@@ -51,10 +58,11 @@ public class Tabu {
         System.arraycopy(solucionActual, 0, mejorSol, 0, mejorSol.length);
         int mejorCosto = this.funcionObjetivo(mejorSol);
 
-        int i = 0;
+        this.iteracion = 0;
+        this.iteracionSinMejora = 0;
 
         long time_start = System.currentTimeMillis();
-        while(i < numeroIteraciones){// iterar segun parametro - condicion de parada
+        while(condicionDeParada(numIteraciones, numIteracionesSinMejora)){// iterar segun parametro - condicion de parada
             solucionActual = this.obtenerMejorVecino(listaTabu, this.distancias, solucionActual);
 
             int costoActual = this.funcionObjetivo(solucionActual);
@@ -62,12 +70,22 @@ public class Tabu {
             if (costoActual < mejorCosto) {
                 System.arraycopy(solucionActual, 0, mejorSol, 0, mejorSol.length);
                 mejorCosto = costoActual;
+                this.iteracionSinMejora = 0;
+            } else {
+                //System.out.printf("Costos (actual - mejor): %d - %d\n", costoActual, mejorCosto);
+                this.iteracionSinMejora += 1;
             }
-            i++;
+            this.distanciaPorIter[(int)iteracion] = mejorCosto;
+            iteracion++;
         }
         this.duracion = ( System.currentTimeMillis() - time_start );
 
         return mejorSol;
+    }
+
+    private boolean condicionDeParada(long iteracionMax, long iteracionSinMejoraMax){
+
+        return this.iteracion < iteracionMax && this.iteracionSinMejora < iteracionSinMejoraMax;
     }
 
     private int[] obtenerMejorVecino(ListaTabu listaTabu,
@@ -116,16 +134,20 @@ public class Tabu {
 
     // intercambiar dos nodos
     private int[] intercambiarNodos(int nodo1, int nodo2, int[] solucion) {
-        int[] sol_aux = new int[solucion.length];
-        System.arraycopy(solucion,0,sol_aux,0,solucion.length);
+        //int[] sol_aux = new int[solucion.length];
+        //System.arraycopy(solucion,0,sol_aux,0,solucion.length);
 
-        int temp = sol_aux[nodo1];
-        sol_aux[nodo1] = sol_aux[nodo2];
-        sol_aux[nodo2] = temp;
-        return sol_aux;
+        int temp = solucion[nodo1];
+        solucion[nodo1] = solucion[nodo2];
+        solucion[nodo2] = temp;
+        return solucion;
     }
 
     public double getDuracion(){
         return this.duracion;
+    }
+
+    public long getIteracion(){
+        return this.iteracion;
     }
 }
