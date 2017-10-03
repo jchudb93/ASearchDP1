@@ -82,4 +82,13 @@ public class Almacen {
     public int getAlto(){
         return this.alto;
     }
+
+    public void limpiarNodos(){
+        this.nodos = new boolean[ancho][alto];
+        for(int i = 0; i < ancho; i++){
+            for(int j = 0; j < alto; j++){
+                this.nodos[i][j] = false;
+            }
+        }
+    }
 }
