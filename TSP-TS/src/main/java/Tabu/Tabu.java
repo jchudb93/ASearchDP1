@@ -150,4 +150,8 @@ public class Tabu {
     public long getIteracion(){
         return this.iteracion;
     }
+
+    public int[] getDistanciaPorIter(){
+        return this.distanciaPorIter;
+    }
 }

@@ -47,3 +47,5 @@ nbdist/
 
 # Archivo de textos
 *.txt
+*.csv
+

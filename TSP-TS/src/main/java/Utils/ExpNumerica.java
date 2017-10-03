@@ -105,6 +105,15 @@ public class ExpNumerica {
             resultado.tiempoRecocido = recocido.getDuracion();
             resultado.iteracionesRecocido = recocido.getNumeroIteraciones();
 
+            //Imprimir distancia x iteraciones dentro del algoritmo
+            //Eliminar luego
+            if (i < 3){
+                int[] distIterRecocido = recocido.getDistanciaPorIter();
+                guardarArrayInt("recocido_" + i + ".csv",distIterRecocido);
+                int[] distIterTabu = tabu.getDistanciaPorIter();
+                guardarArrayInt("tabu_" + i + ".csv",distIterTabu);
+            }
+
             this.resultados.add(resultado);
         }
         this.guardarResultados("resultados.csv");
@@ -119,6 +128,19 @@ public class ExpNumerica {
             System.out.print(String.valueOf(arr[i]) + " ");
         }
         System.out.println();
+    }
+
+    private void guardarArrayInt(String nombre_archivo, int[] arr){
+        try{
+            PrintStream out = new PrintStream(new FileOutputStream(nombre_archivo));
+            System.setOut(out);
+            for (int i = 0; i < arr.length; i++) {
+                out.println(arr[i]);
+            }
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
     }
 
     private void guardarResultados(String nombre_archivo){
