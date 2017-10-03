@@ -3,10 +3,12 @@ package Models;
 import java.awt.Point;
 
 public class Producto {
+    private int idAlgoritmo;
     private String descripcion;
     private Point posicion;
 
-    public Producto(String descripciton, Point posicion){
+    public Producto(int idAlgoritmo, String descripciton, Point posicion){
+        this.idAlgoritmo = idAlgoritmo;
         this.setDescripcion(descripciton);
         this.setPosicion(new Point(posicion.x, posicion.y));
     }
@@ -30,4 +32,9 @@ public class Producto {
     public void setPosicion(int x, int y){
         this.posicion = new Point(x,y);
     }
+
+    public int getIdAlgoritmo(){
+        return this.idAlgoritmo;
+    }
+
 }

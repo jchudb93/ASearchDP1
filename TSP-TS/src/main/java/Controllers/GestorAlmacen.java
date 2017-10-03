@@ -3,11 +3,29 @@ package Controllers;
 import Models.*;
 
 import java.awt.Point;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Random;
 import Models.Almacen;
+
+import Utils.Archivos;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
 
 public class GestorAlmacen {
 
@@ -28,6 +46,73 @@ public class GestorAlmacen {
         }
         private int getDy(){
             return this.dy;
+        }
+    }
+
+    public static Almacen cargarAlmacenXML(String nombre_archivo){
+
+        return null;
+    }
+
+    public static void guardarAlmacenXML(Almacen almacen, String nombre_archivo){
+        DocumentBuilderFactory dFact = DocumentBuilderFactory.newInstance();
+        try{
+
+            DocumentBuilder build = dFact.newDocumentBuilder();
+            Document doc = build.newDocument();
+            Element raiz = crearAlmacenNodoXML(doc, almacen);
+            doc.appendChild(raiz);
+            Archivos.crearArchivoXML(doc, nombre_archivo);
+
+        } catch(ParserConfigurationException ex){
+            ex.printStackTrace();
+        }
+    }
+
+    public static Element crearAlmacenNodoXML(Document doc, Almacen almacen){
+        Element raiz = doc.createElement("almacen");
+        doc.appendChild(raiz);
+
+        Element anchoNodo = doc.createElement("ancho");
+        anchoNodo.appendChild(doc.createTextNode(String.valueOf(almacen.getAncho())));
+        raiz.appendChild(anchoNodo);
+
+        Element altoNodo = doc.createElement("alto");
+        altoNodo.appendChild(doc.createTextNode(String.valueOf(almacen.getAlto())));
+        raiz.appendChild(altoNodo);
+
+        //matriz almacen
+        Element almNodo = doc.createElement("almacen");
+        boolean[][] alm = almacen.getAlmacen();
+        crearNodoXMLConMatriz(doc, alm, almNodo);
+        raiz.appendChild(almNodo);
+
+        //matriz nodos
+        Element nodosNodo = doc.createElement("nodos");
+        boolean[][] nodos = almacen.getNodos();
+        crearNodoXMLConMatriz(doc, nodos, nodosNodo);
+        raiz.appendChild(nodosNodo);
+
+        //racks
+        Element racks = doc.createElement("racks");
+        for(Rack rack: almacen.getRacks()){
+            Element rackNodo = GestorRack.crearRackNodoXML(doc, rack);
+            racks.appendChild(rackNodo);
+        }
+        raiz.appendChild(racks);
+
+        return raiz;
+    }
+
+    private static void crearNodoXMLConMatriz(Document doc, boolean[][] matriz, Element raiz){
+        for(int i = 0; i < matriz.length; i++){
+            for(int j = 0; j < matriz[i].length; j++){
+                Element posicion = doc.createElement("posicion");
+                posicion.setAttribute("i", String.valueOf(i));
+                posicion.setAttribute("j", String.valueOf(j));
+                posicion.appendChild(doc.createTextNode(String.valueOf(matriz[i][j])));
+                raiz.appendChild(posicion);
+            }
         }
     }
 
@@ -302,6 +387,16 @@ public class GestorAlmacen {
 
         alm.setNodos(nodos);
     }
+
+    public static void llenarConProdYPtoPartida(Almacen alm, ArrayList<Producto> productos){
+        boolean[][] nodos = alm.getNodos();
+        for(Producto prod: productos){
+            Point posProd = prod.getPosicion();
+            nodos[posProd.x][posProd.y] = true;
+        }
+        alm.setNodos(nodos);
+    }
+
     /**
      *  Imprimir almacen
      */
