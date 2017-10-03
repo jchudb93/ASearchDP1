@@ -18,7 +18,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        ExpNumerica expNumerica = new ExpNumerica(1, 40, 50);
+        ExpNumerica expNumerica = new ExpNumerica(50, 40, 50);
 
         expNumerica.generarRandom("almacen.xml", "productos.xml");
     }

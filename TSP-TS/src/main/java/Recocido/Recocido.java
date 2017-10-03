@@ -6,16 +6,21 @@ import java.lang.*;
 
 public class Recocido {
 
-
     private int [][] distancias;
     private int [] caminoInicial;
+    private long duracion;
 
     //temperatura inicial
     private double temperatura = 1000;
     //que va disminuyendo en cada iteracion segun:
-    private double velocidadEnfriamiento = 0.01;
+    private double velocidadEnfriamiento;
+    //determinada por el
+    private long numeroIteraciones = 100000;
 
-    //constructor recibe las di
+    //valor de la funcion objetivo final
+    private long funcionObjetivo;
+
+    //constructor recibe la matriz de distancias y camino inicial
     public Recocido(int [][] distancias, int [] caminoInicial) {
         this.setCaminoInicial(caminoInicial);
         this.setDistancias(distancias);
@@ -23,9 +28,12 @@ public class Recocido {
 
     public int[] generarCamino(){
 
-        System.out.println("Distancia Total Solución Inicial: " + funcionObjetivo(this.getCaminoInicial()));
-        System.out.print("Camino inicial: ");
-        Utiles.imprimirCamino(this.getCaminoInicial());
+        long time_start = System.currentTimeMillis();
+        velocidadEnfriamiento = temperatura/ getNumeroIteraciones();
+
+        //System.out.println("Distancia Total Solución Inicial: " + funcionObjetivo(this.getCaminoInicial()));
+        //System.out.print("Camino inicial: ");
+        //Utiles.imprimirCamino(this.getCaminoInicial());
 
         //me va a ayudar para que el swap sea aleatorio
         Random rand = new Random();
@@ -78,15 +86,18 @@ public class Recocido {
             //enfriamiento
             temperatura = temperatura - velocidadEnfriamiento;
 
-            System.out.println("Temperatura actual: " + temperatura);
-            System.out.print("Solucion actual: ");
-            Utiles.imprimirCamino(this.getCaminoInicial());
-            System.out.print("Costo Actual: ");
-            System.out.println();
+            //System.out.println("Temperatura actual: " + temperatura);
+            //System.out.print("Solucion actual: ");
+            //Utiles.imprimirCamino(this.getCaminoInicial());
+            //System.out.print("Costo Actual: ");
+            //System.out.println();
 
         }
 
+        this.setDuracion(( System.currentTimeMillis() - time_start ));
+        this.setFuncionObjetivo(fObjetivoActual);
         return solucionActual;
+
     }
 
 
@@ -131,5 +142,29 @@ public class Recocido {
 
     public void setVelocidadEnfriamiento(double velocidadEnfriamiento) {
         this.velocidadEnfriamiento = velocidadEnfriamiento;
+    }
+
+    public long getDuracion() {
+        return duracion;
+    }
+
+    public void setDuracion(long duracion) {
+        this.duracion = duracion;
+    }
+
+    public long getNumeroIteraciones() {
+        return numeroIteraciones;
+    }
+
+    public void setNumeroIteraciones(long numeroIteraciones) {
+        this.numeroIteraciones = numeroIteraciones;
+    }
+
+    public long getFuncionObjetivo() {
+        return funcionObjetivo;
+    }
+
+    public void setFuncionObjetivo(long funcionObjetivo) {
+        this.funcionObjetivo = funcionObjetivo;
     }
 }

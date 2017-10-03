@@ -7,6 +7,7 @@ import Models.Almacen;
 import Models.Producto;
 import Models.Rack;
 import Tabu.Tabu;
+import Recocido.*;
 
 import java.awt.*;
 import java.io.FileOutputStream;
@@ -22,18 +23,19 @@ public class ExpNumerica {
     private int numMuestras;
     private int productosMin;
     private int productosMax;
+    private int[] numProductos;
 
     private ArrayList<Resultado> resultados;
 
     private class Resultado{
         public long tiempoTabu;
         public long iteracionesTabu;
-        public int costoTabu;
+        public long costoTabu;
 
 
         public long tiempoRecocido;
         public long iteracionesRecocido;
-        public int costoRecocido;
+        public long costoRecocido;
 
         public Resultado(){
         }
@@ -46,6 +48,7 @@ public class ExpNumerica {
         this.productosMax = productosMax;
 
         this.resultados = new ArrayList<Resultado>();
+        this.numProductos = new int[numMuestras];
     }
 
     public void generarRandom(String archivoAlm, String archivoProd){
@@ -57,7 +60,7 @@ public class ExpNumerica {
         for(int i = 0; i < this.numMuestras; i++){
             alm.limpiarNodos();
             int numProductos = random.nextInt(this.productosMax - this.productosMin) + this.productosMin;
-
+            this.numProductos[i] = numProductos;
             ArrayList<Producto> productos = GestorProducto.generarProductos(alm, numProductos, puntoInicio);
 
             GestorAlmacen.llenarConProdYPtoPartida(alm, productos);
@@ -86,12 +89,21 @@ public class ExpNumerica {
             Tabu tabu = new Tabu(distancias, caminoInicial);
             int[] solucion = tabu.generarCamino(1000, 1000, 5, 5);
 
+            //Recocido
+            Recocido recocido = new Recocido(distancias, caminoInicial);
+            recocido.setNumeroIteraciones(1000);
+            int[] solucionRecocido = recocido.generarCamino();
+
             //Guardar soluciones
             Resultado resultado = new Resultado();
 
             resultado.costoTabu = tabu.funcionObjetivo(solucion);
             resultado.tiempoTabu = tabu.getDuracion();
             resultado.iteracionesTabu = tabu.getIteracion();
+
+            resultado.costoRecocido = recocido.getFuncionObjetivo();
+            resultado.tiempoRecocido = recocido.getDuracion();
+            resultado.iteracionesRecocido = recocido.getNumeroIteraciones();
 
             this.resultados.add(resultado);
         }
@@ -114,11 +126,20 @@ public class ExpNumerica {
             PrintStream out = new PrintStream(new FileOutputStream(nombre_archivo));
             System.setOut(out);
             out.println("tabu_iteraciones, tabu_costo, tabu_tiempo, " +
-                        "recocido_iteraciones, recocido_costo, recocido_tiempo");
+                        "recocido_iteraciones, recocido_costo, recocido_tiempo, cantidad productos, " +
+                        "quien_gano");
+            int i = 0;
             for (Resultado res: this.resultados) {
                 out.print(res.iteracionesTabu + ", " + res.costoTabu + ", " + res.tiempoTabu + ", " +
-                        res.iteracionesRecocido + ", " + res.costoRecocido + ", " + res.tiempoRecocido);
+                        res.iteracionesRecocido + ", " + res.costoRecocido + ", " + res.tiempoRecocido +
+                ", " + this.numProductos[i] + ", ");
+                if(res.costoTabu < res.costoRecocido){
+                    out.print("Tabu");
+                } else {
+                    out.print("Recocido");
+                }
                 out.println();
+                i++;
             }
         }
         catch(IOException e){
