@@ -25,6 +25,12 @@ public class Almacen {
 
         this.almacen = new boolean[ancho][alto];
         this.nodos = new boolean[ancho][alto];
+        for(int i = 0; i < ancho; i++){
+            for(int j = 0; j < alto; j++){
+                this.almacen[i][j] = false;
+                this.nodos[i][j] = false;
+            }
+        }
         this.racks = new ArrayList<Rack>();
     }
 

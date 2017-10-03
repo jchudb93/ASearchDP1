@@ -59,8 +59,6 @@ public class GestorAlmacen {
      */
     private static Rack crearRackPosible(int iniX, int iniY, int largo, DIR dir, boolean[][] almacen, int ancho, int alto){
 
-
-
         if(dir.getDx() == 0){ //izquierda o derecha
             int finY = iniY + largo*dir.getDy();
             if(finY <= 0) finY = 1;
@@ -145,14 +143,7 @@ public class GestorAlmacen {
         boolean [][] almacen = alm.getAlmacen();
         int ancho = alm.getAncho();
         int alto = alm.getAlto();
-        boolean [][] nodos = new boolean[ancho][alto];
-
-        //inicializar nodos (false)
-        for(int i = 0; i < ancho; i++){
-            for(int j = 0; j < alto; j++){
-                nodos[i][j] = false;
-            }
-        }
+        boolean [][] nodos = alm.getNodos();
 
         //obtener vertices
         for(int i = 1; i < ancho - 1; i++){
@@ -295,7 +286,7 @@ public class GestorAlmacen {
                         if(encontreVertice){
                             nodos[x2][j] = true;
                         }
-                        x2++;
+                        x2--;
                     }
                 }
             }
@@ -304,6 +295,13 @@ public class GestorAlmacen {
         alm.setNodos(nodos);
     }
 
+    public static void escogerPuntoPartida(Almacen alm, int i, int j){
+        boolean[][] nodos = alm.getNodos();
+
+        nodos[i][j] = true;
+
+        alm.setNodos(nodos);
+    }
     /**
      *  Imprimir almacen
      */
@@ -313,25 +311,7 @@ public class GestorAlmacen {
         int alto = almacen.getAlto();
         boolean[][] matriz = almacen.getAlmacen();
 
-        try {
-            PrintWriter writer = new PrintWriter(nombre_archivo, "UTF-8");
-            for (int i = 0; i < ancho; i++) {
-                for (int j = 0; j < alto; j++) {
-                    if (matriz[i][j]) {
-                        writer.print("x ");
-                        System.out.print("x ");
-                    } else {
-                        writer.print("_ ");
-                        System.out.print("_ ");
-                    }
-                }
-                System.out.println();
-                writer.println();
-            }
-            writer.close();
-        } catch(IOException e){
-
-        }
+        imprimirMatriz(matriz, ancho, alto, nombre_archivo);
     }
 
     public static void imprimirNodos(Almacen almacen, String nombre_archivo){
@@ -340,6 +320,10 @@ public class GestorAlmacen {
         int alto = almacen.getAlto();
         boolean[][] matriz = almacen.getNodos();
 
+        imprimirMatriz(matriz, ancho, alto, nombre_archivo);
+    }
+
+    private static void imprimirMatriz(boolean[][] matriz, int ancho, int alto, String nombre_archivo){
         try {
             PrintWriter writer = new PrintWriter(nombre_archivo, "UTF-8");
             for (int i = 0; i < ancho; i++) {
