@@ -41,6 +41,33 @@ public class Almacen {
         }
     }
 
+
+
+    public void imprimirAlmacen(){
+
+        for (int i = 0; i < alto; i++) {
+            for (int j = 0; j < ancho; j++) {
+
+                if(nodos[i][j] == true){
+                    System.out.print("PP");
+                }
+                else{
+                    if(almacen[i][j] == false){
+                        System.out.print("  ");
+                    }
+                    else{
+                        System.out.print("XX");
+                    }
+                }
+            }
+            System.out.println();
+        }
+    }
+
+
+
+
+
     public boolean[][] getNodos(){
         return this.nodos;
     }
@@ -56,6 +83,7 @@ public class Almacen {
     public boolean[][] getAlmacen(){
         return this.almacen;
     }
+
     public void setAlmacen(boolean[][] almacen){
         for(int i = 0; i < this.ancho; i++){
             for(int j = 0; j < this.alto; j++){

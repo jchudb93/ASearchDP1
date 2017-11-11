@@ -5,7 +5,6 @@ import Controllers.GestorDistancias;
 import Controllers.GestorProducto;
 import Models.Almacen;
 import Models.Producto;
-import Models.Rack;
 import Tabu.Tabu;
 import Recocido.*;
 
@@ -64,8 +63,6 @@ public class ExpNumerica {
             ArrayList<Producto> productos = GestorProducto.generarProductos(alm, numProductos, puntoInicio);
 
             GestorAlmacen.llenarConProdYPtoPartida(alm, productos);
-            //GestorAlmacen.guardarAlmacenXML(alm, "almacen.xml");
-            //GestorAlmacen.escogerPuntoPartida(alm, 0,0);
             GestorAlmacen.generarNodos(alm);
 
             GestorDistancias dist = new GestorDistancias(alm);
@@ -89,30 +86,12 @@ public class ExpNumerica {
             Tabu tabu = new Tabu(distancias, caminoInicial);
             int[] solucion = tabu.generarCamino(1000, 1000, 5, 5);
 
-            //Recocido
-            Recocido recocido = new Recocido(distancias, caminoInicial);
-            recocido.setNumeroIteraciones(1000);
-            int[] solucionRecocido = recocido.generarCamino();
-
             //Guardar soluciones
             Resultado resultado = new Resultado();
 
             resultado.costoTabu = tabu.funcionObjetivo(solucion);
             resultado.tiempoTabu = tabu.getDuracion();
             resultado.iteracionesTabu = tabu.getIteracion();
-
-            resultado.costoRecocido = recocido.getFuncionObjetivo();
-            resultado.tiempoRecocido = recocido.getDuracion();
-            resultado.iteracionesRecocido = recocido.getNumeroIteraciones();
-
-            //Imprimir distancia x iteraciones dentro del algoritmo
-            //Eliminar luego
-            if (i < 3){
-                int[] distIterRecocido = recocido.getDistanciaPorIter();
-                guardarArrayInt("recocido_" + i + ".csv",distIterRecocido);
-                int[] distIterTabu = tabu.getDistanciaPorIter();
-                guardarArrayInt("tabu_" + i + ".csv",distIterTabu);
-            }
 
             this.resultados.add(resultado);
         }
